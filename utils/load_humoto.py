@@ -117,7 +117,8 @@ def load_one_humoto_sequence(
             
             data['object_models'] = {}
             for obj_name in object_names:
-                obj_path = os.path.join(object_model_path, obj_name, f'{obj_name}.obj')
+                object_model_name = obj_name.split('.')[0]
+                obj_path = os.path.join(object_model_path, object_model_name, f'{object_model_name}.obj')
                 object_model = load_object_model(obj_path, object_modality)
                 data['object_models'][obj_name] = object_model
     if include_text:
