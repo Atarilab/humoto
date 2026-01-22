@@ -83,6 +83,9 @@ frame_images = render_sequence(human_joints, human_verts, human_faces, object_to
 # write the video
 if not output_folder or output_folder == '':
     output_folder = pkl_folder_path
+else:
+    # Create output directory if it doesn't exist
+    os.makedirs(output_folder, exist_ok=True)
 output_path = os.path.join(output_folder, f"{folder}.mp4")
 
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')

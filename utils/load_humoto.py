@@ -256,11 +256,12 @@ def get_object_poses(object_data: Dict[str, List[List[float]]]) -> Dict[str, np.
     
     object_pose = {}
     for obj in object_data:
-        if not object_data[obj]:
+        obj_data = object_data[obj]
+        if obj_data is None or (hasattr(obj_data, '__len__') and len(obj_data) == 0):
             print(f"Warning: Empty pose data for object '{obj}'")
             continue
         
-        transform_data = np.array(object_data[obj], dtype=np.float32)  # [B, 7]
+        transform_data = np.array(obj_data, dtype=np.float32)  # [B, 7]
         object_pose[obj] = transform_data
     return object_pose
 

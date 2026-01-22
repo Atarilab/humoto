@@ -49,15 +49,78 @@ We recommend using the following steps to convert the dataset to a format that i
 
 Python 3.10 is required for bpy version 4.0.0. If you need to use a different Python version, refer to the official bpy documentation at https://download.blender.org/pypi/bpy/.
 
+**Using uv with automatic venv activation (recommended):**
+
+This repository is configured to automatically activate the virtual environment when you enter the directory using `direnv`. 
+
+First, install and set up `direnv`:
+```bash
+# Install direnv (if not already installed)
+# On Ubuntu/Debian:
+sudo apt-get install direnv
+
+# On macOS:
+brew install direnv
+
+# Add to your shell configuration (~/.bashrc or ~/.zshrc):
+eval "$(direnv hook bash)"  # for bash
+# or
+eval "$(direnv hook zsh)"    # for zsh
+```
+
+Then, allow direnv to use the `.envrc` file:
+```bash
+cd /path/to/humoto
+direnv allow
+```
+
+After this, the virtual environment will automatically activate whenever you `cd` into this directory, and deactivate when you leave it. The `.envrc` file will:
+- Create a virtual environment with Python 3.10 if it doesn't exist
+- Sync dependencies from `pyproject.toml` using `uv sync`
+- Install packages that require custom indexes (PyTorch, bpy, PyTorch3D)
+
+**Manual installation using uv:**
+
+If you prefer to manage the environment manually:
+
+```bash
+# Create virtual environment with Python 3.10
+uv venv --python 3.10
+
+# Activate the virtual environment
+source .venv/bin/activate
+
+# Sync dependencies from pyproject.toml
+uv sync
+
+# Install bpy from Blender's PyPI
+uv pip install bpy==4.0.0 --extra-index-url https://download.blender.org/pypi/
+
+# Install PyTorch with CUDA 12.1 support (compatible with CUDA 12.8)
+uv pip install torch==2.2.0 torchvision==0.17.0 torchaudio==2.2.0 --index-url https://download.pytorch.org/whl/cu121
+
+# Install PyTorch3D from GitHub
+uv pip install "git+https://github.com/facebookresearch/pytorch3d.git" --no-build-isolation
+```
+
+Or use the installation script:
+```bash
+bash install_uv.sh
+```
+
+**Alternative: Using conda/pip:**
+
 ```bash
 conda create -n humoto python=3.10
 conda activate humoto
 pip install bpy==4.0.0 --extra-index-url https://download.blender.org/pypi/
 pip install torch==2.1.2 torchvision==0.16.2 torchaudio==2.1.2 --index-url https://download.pytorch.org/whl/cu118
 pip install -r requirements.txt
+pip install iopath
+pip install "git+https://github.com/facebookresearch/pytorch3d.git"
 ```
 
-Follow the instructions in the [PyTorch3D documentation](https://github.com/facebookresearch/pytorch3d/blob/main/INSTALL.md) to install PyTorch3D.
+For more PyTorch3D installation options, see the [PyTorch3D documentation](https://github.com/facebookresearch/pytorch3d/blob/main/INSTALL.md).
 
 ## Human Model
 
